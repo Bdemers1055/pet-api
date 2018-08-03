@@ -37,8 +37,19 @@ server.get('/pets', async (req, res) => {
 });
 
 // get one special et by id
-server.get('/pets/:id', (req, res) => {
-    res.send(`getting ${req.params.id} pet`);
+server.get('/pets/:id', async (req, res) => {
+    const { id } = req.params; 
+    try {
+        const pets = await Pet.find({ _id: id });
+        res.status(200).json({
+            pets: pets
+        });
+    }
+    catch(err) {
+        res.status(500).json({
+            msg: 'broken'
+        });
+    }
 });
 
 // create new pet
