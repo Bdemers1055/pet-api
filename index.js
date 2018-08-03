@@ -2,6 +2,9 @@ const express = require('express');
 const server = express();
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const helmet = require ('helmet');
 
 // set up env variables
 dotenv.config();
@@ -14,6 +17,10 @@ const port = process.env.PORT || 8008;
 
 
 // power ups/middleware
+server.use(helmet());
+server.use(morgan("combined")); // status logging 
+server.use(bodyParser.json()); // accept json data
+server.use(bodyParser.urlencoded({ extended: true })); // accept html form data
 
 // temporary
 
@@ -53,8 +60,20 @@ server.get('/pets/:id', async (req, res) => {
 });
 
 // create new pet
-server.post('/pets', (req, res) => {
-    res.send('new pet');
+server.post('/pets/', async (req, res) => {
+    const { name, owner } = req.body;
+    try {
+        const pet = new Pet({ name, owner });
+        await pet.save();
+        res.status(201).json({
+            msg: 'saved pet',
+            pet
+        });
+    } catch(err){
+        res.status(500).json({
+            msg: 'pet not created'
+        });
+    }
 });
 
 //update pet by id
