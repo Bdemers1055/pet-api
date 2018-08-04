@@ -77,8 +77,20 @@ server.post('/pets/', async (req, res) => {
 });
 
 //update pet by id
-server.put('/pets/:id', (req, res) => {
-    res.send(`updating ${req.params.id} pet`);
+server.put('/pets/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name, owner } = req.body;
+    try {
+        const updatedPet = await Pet.findByIdAndUpdate( id, { name, owner }, { new: true });
+        res.status(200).json({
+            msg: 'update successful',
+            pet: updatedPet
+        });
+    } catch (error) {
+        res.status(500).json({
+            msg: 'pet did not update'
+        });
+    }
 });
 
 //delete pet by id
