@@ -59,9 +59,9 @@ server.get('/pets/:id', async (req, res) => {
 
 // create new pet
 server.post('/pets/', async (req, res) => {
-    const { name, owner } = req.body;
+    const { name, owner, petType, age, createdAt } = req.body;
     try {
-        const pet = new Pet({ name, owner });
+        const pet = new Pet({ name, owner, petType, age, createdAt });
         await pet.save();
         res.status(201).json({
             msg: 'saved pet',
