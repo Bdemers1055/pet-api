@@ -22,10 +22,8 @@ server.use(morgan("combined")); // status logging
 server.use(bodyParser.json()); // accept json data
 server.use(bodyParser.urlencoded({ extended: true })); // accept html form data
 
-// temporary
-
 //models
-const Pet = mongoose.model('Pet', { name: String, owner: String });
+const Pet = require('./models/pet');
 
 // routes
 //get all pets
