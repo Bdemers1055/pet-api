@@ -54,9 +54,9 @@ router.post('/pets/', async (req, res) => {
 //update pet by id
 router.put('/pets/:id', async (req, res) => {
     const { id } = req.params;
-    const { name, owner } = req.body;
+    const { name, owner, petType, age } = req.body;
     try {
-        const updatedPet = await Pet.findByIdAndUpdate( id, { name, owner }, { new: true });
+        const updatedPet = await Pet.findByIdAndUpdate( id, { name, owner, petType, age }, { new: true });
         res.status(200).json({
             msg: 'update successful',
             pet: updatedPet
