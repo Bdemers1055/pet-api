@@ -4,7 +4,7 @@ const Pet = require('../models/pet');
 
 // routes
 //get all pets
-router.get('/pets', async (req, res) => {
+router.get('/pets', async (req, res, next) => {
     try {
         const pets = await Pet.find();
         res.status(200).json({
@@ -12,14 +12,12 @@ router.get('/pets', async (req, res) => {
         });
     } 
     catch(err) {
-        res.status(500).json({
-            msg: 'broken'
-        });
+        next(err);
     }
 });
 
 // get one special et by id
-router.get('/pets/:id', async (req, res) => {
+router.get('/pets/:id', async (req, res, next) => {
     const { id } = req.params; 
     try {
         const pets = await Pet.find({ _id: id });
@@ -28,14 +26,12 @@ router.get('/pets/:id', async (req, res) => {
         });
     }
     catch(err) {
-        res.status(500).json({
-            msg: 'broken'
-        });
+        next(err);
     }
 });
 
 // create new pet
-router.post('/pets/', async (req, res) => {
+router.post('/pets/', async (req, res, next) => {
     const { name, owner, petType, age, createdAt } = req.body;
     try {
         const pet = new Pet({ name, owner, petType, age, createdAt });
@@ -45,14 +41,12 @@ router.post('/pets/', async (req, res) => {
             pet
         });
     } catch(err){
-        res.status(500).json({
-            msg: 'pet not created'
-        });
+        next(err);
     }
 });
 
 //update pet by id
-router.put('/pets/:id', async (req, res) => {
+router.put('/pets/:id', async (req, res, next) => {
     const { id } = req.params;
     const { name, owner, petType, age } = req.body;
     try {
@@ -61,15 +55,13 @@ router.put('/pets/:id', async (req, res) => {
             msg: 'update successful',
             pet: updatedPet
         });
-    } catch (error) {
-        res.status(500).json({
-            msg: 'pet did not update'
-        });
+    } catch(err) {
+        next(err);
     }
 });
 
 //delete pet by id
-router.delete('/pets/:id', async (req, res) => {
+router.delete('/pets/:id', async (req, res, next) => {
     const { id } = req.params; 
     try {
         await Pet.findByIdAndRemove(id);
@@ -78,9 +70,7 @@ router.delete('/pets/:id', async (req, res) => {
         });
     }
     catch(err) {
-            res.status(500).json({
-                msg: 'broken'
-            });
+            next(err);
     }
 });
 

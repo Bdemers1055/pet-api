@@ -23,20 +23,15 @@ server.use(helmet());
 server.use(morgan("combined")); // status logging 
 server.use(bodyParser.json()); // accept json data
 server.use(bodyParser.urlencoded({ extended: true })); // accept html form data
-
+const errorHandler = require('./middlewares/errorHandler');
+const notFoundHandler = require('./middlewares/404');
 //routes
 server.use(petRouter);
 
-// 404 handler
-server.use(function(req, res){
-    console.log('here');
-    res.status(404).json({
-        msg: 'resource not found'
-    });
-});
+server.use(notFoundHandler);
+server.use(errorHandler);
 
 // kick it off
-
 server.listen(port, () => { 
     console.log(`Now listening at port 8008`); 
 });
